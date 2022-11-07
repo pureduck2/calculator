@@ -6,6 +6,32 @@ import 'package:calculator/widgets/history.dart';
 class Calculator extends StatelessWidget {
   const Calculator({super.key});
 
+  final List<String> buttons = const <String>[
+    'AC',
+    '+/-',
+    '%',
+    '/',
+
+    '7',
+    '8',
+    '9',
+    'x',
+
+    '4',
+    '5',
+    '6',
+    '-',
+
+    '1',
+    '2',
+    '3',
+    '+',
+
+    '0',
+    '.',
+    '='
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +44,6 @@ class Calculator extends StatelessWidget {
             GridView.count(
               crossAxisCount: 4,
               shrinkWrap: true,
-              padding: EdgeInsets.all(20),
               children: const [
                 Button(text: '1'),
                 Button(text: '2'),

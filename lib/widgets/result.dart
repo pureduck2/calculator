@@ -17,7 +17,7 @@ class _ResultState extends State<Result> {
       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
       child: Text(
         _result,
-        style: TextStyle(fontSize: 72),
+        style: const TextStyle(fontSize: 72),
       ),
     );
   }

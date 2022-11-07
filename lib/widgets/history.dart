@@ -17,7 +17,7 @@ class _HistoryState extends State<History> {
       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
       child: Text(
         _result,
-        style: TextStyle(fontSize: 24),
+        style: const TextStyle(fontSize: 24),
       ),
     );
   }
