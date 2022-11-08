@@ -4,33 +4,38 @@ import 'package:calculator/widgets/result.dart';
 import 'package:calculator/widgets/history.dart';
 
 class Calculator extends StatelessWidget {
-  const Calculator({super.key});
+  Calculator({super.key});
 
-  final List<String> buttons = const <String>[
-    'AC',
-    '+/-',
-    '%',
-    '/',
+  final List<Button> buttons = <Button>[
+    const Button('AC'),
+    const Button('+/-'),
+    const Button('%'),
+    const Button('/'),
 
-    '7',
-    '8',
-    '9',
-    'x',
+    const Button('7'),
+    const Button('8'),
+    const Button('9'),
+    const Button('x'),
 
-    '4',
-    '5',
-    '6',
-    '-',
+    const Button('4'),
+    const Button('5'),
+    const Button('6'),
+    const Button('-'),
 
-    '1',
-    '2',
-    '3',
-    '+',
+    const Button('1'),
+    const Button('2'),
+    const Button('3'),
+    const Button('+'),
 
-    '0',
-    '.',
-    '='
+    Button('0', flex: 2, shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(80)
+    )),
+    const Button('.'),
+    const Button('='),
   ];
+
+  List<Widget> _sublistButtons(int start, int end) =>
+      buttons.sublist(start, end).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +46,30 @@ class Calculator extends StatelessWidget {
           children: <Widget>[
             const History(),
             const Result(),
-            GridView.count(
-              crossAxisCount: 4,
-              shrinkWrap: true,
-              children: const [
-                Button(text: '1'),
-                Button(text: '2'),
-                Button(text: '3'),
-                Button(text: '4')
+            Column(
+              children: <Widget>[
+                Row(
+                    children: _sublistButtons(0, 4)
+                ),
+                const SizedBox(height: 10),
+                Row(
+                    children: _sublistButtons(4, 8)
+                ),
+                const SizedBox(height: 10),
+                Row(
+                    children: _sublistButtons(8, 12)
+                ),
+                const SizedBox(height: 10),
+                Row(
+                    children: _sublistButtons(12, 16)
+                ),
+                const SizedBox(height: 10),
+                Row(
+                    children: <Widget>[
+                      const SizedBox(width: 7), // It doesn't look right, but whatever
+                      ..._sublistButtons(16, 19)
+                    ]
+                ),
               ],
             )
           ],
