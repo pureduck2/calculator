@@ -174,31 +174,32 @@ class _CalculatorState extends State<Calculator> {
         buttons.sublist(start, end).toList();
 
     return Scaffold(
-        body: SafeArea(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              Equation(text: secondEquation, color: Colors.pink),
-              Equation(text: mainEquation, fontSize: 72),
-            ],
-          ),
-          Column(
-            children: <Widget>[
-              Row(children: sublistButtons(0, 4)),
-              Row(children: sublistButtons(4, 8)),
-              Row(children: sublistButtons(8, 12)),
-              Row(children: sublistButtons(12, 16)),
-              Row(children: <Widget>[
-                // It doesn't look right, but whatever
-                ...sublistButtons(16, 19)
-              ]),
-            ],
-          ),
-        ],
-      ),
-    ));
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Equation(text: secondEquation, color: Colors.pink),
+                Equation(text: mainEquation, fontSize: 72),
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                Row(children: sublistButtons(0, 4)),
+                Row(children: sublistButtons(4, 8)),
+                Row(children: sublistButtons(8, 12)),
+                Row(children: sublistButtons(12, 16)),
+                Row(children: <Widget>[
+                  // It doesn't look right, but whatever
+                  ...sublistButtons(16, 19)
+                ]),
+              ],
+            )
+          ],
+        )
+      )
+    );
   }
 }
