@@ -1,32 +1,101 @@
 import 'package:calculator/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:calculator/widgets/equation.dart';
-
-enum ActionType { value, add, substract, multiply, divide, modulo }
-
-class Action {
-  const Action(this.type, {this.value});
-
-  final ActionType type;
-  final double? value;
-}
+import 'package:math_expressions/math_expressions.dart';
 
 class Calculator extends StatefulWidget {
-  Calculator({super.key});
+  const Calculator({super.key});
 
   @override
   State<Calculator> createState() => _CalculatorState();
 }
 
 class _CalculatorState extends State<Calculator> {
-  List<Action> actions = [];
+  String mainEquation = '';
+  String secondEquation = '';
 
-  String mainEquation = '1470';
-  String secondEquation = '78 x 5 + 540 x 2';
+  String removeLast(String string) {
+    if (string.isNotEmpty) {
+      return string.substring(0, string.length - 1);
+    } else {
+      return '';
+    }
+  }
+
+  String getLast(String string) {
+    String last;
+    if (string.isNotEmpty) {
+      last = string.substring(string.length - 1);
+    } else {
+      last = '';
+    }
+
+    return last;
+  }
+
+  bool isSymbol(String string) {
+    switch (string) {
+      case '+':
+      case '-':
+      case 'x':
+      case '/':
+      case '%':
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  void delete(Button button) {
+    setState(() {
+      secondEquation = removeLast(secondEquation);
+      mainEquation = '';
+    });
+  }
+
+  void appendOrReplace(Button button) {
+    setState(() {
+      String last = getLast(secondEquation);
+
+      switch (last) {
+        case '+':
+        case '-':
+        case 'x':
+        case '/':
+        case '%':
+          secondEquation =
+              '${secondEquation.substring(0, secondEquation.length - 1)}${button.text}';
+          break;
+        default:
+          secondEquation += button.text;
+          mainEquation = '';
+          break;
+      }
+    });
+  }
 
   void append(Button button) {
     setState(() {
-      mainEquation += button.text;
+      var lastCharacter = getLast(secondEquation);
+      var lastNumber = secondEquation.split(RegExp(r'[+\-x/]')).last;
+
+      if (button.text == '.' &&
+          (isSymbol(lastCharacter) || lastCharacter.isEmpty)) {
+        secondEquation += '0.';
+      } else if (button.text == '.' && lastNumber.contains('.')) {
+        // do nothing
+      } else if (button.text == '0' &&
+          lastCharacter == '0' &&
+          !lastNumber.contains('.') &&
+          lastNumber.length == 1) {
+        // do nothing
+      } else if (lastCharacter == '0' && !lastNumber.contains('.') && lastNumber.length == 1) {
+        secondEquation = '${removeLast(secondEquation)}${button.text}';
+      } else {
+        secondEquation += button.text;
+      }
+
+      mainEquation = '';
     });
   }
 
@@ -34,110 +103,61 @@ class _CalculatorState extends State<Calculator> {
     setState(() {
       mainEquation = '';
       secondEquation = '';
-      actions = [];
-    });
-  }
-
-  void changeSymbol(Button button) {
-    setState(() {
-      if (mainEquation[0] == '-') {
-        mainEquation = mainEquation.substring(1);
-      } else {
-        mainEquation = '-$mainEquation';
-      }
-    });
-  }
-
-  void addAction(ActionType type, {double? value}) {
-    setState(() {
-      actions.add(Action(type, value: value));
-      mainEquation = '';
     });
   }
 
   void calc(Button button) {
-    addAction(ActionType.value, value: double.tryParse(mainEquation) ?? 0);
     setState(() {
-      double result = actions.take(1).first.value ?? 0;
-
-      // for (var action in actions.sublist(1)) {
-      for (int i = 1; i < actions.length; i++) {
-        var action = actions[i];
-        debugPrint('${action.type} ${action.value}');
-        switch (action.type) {
-          case ActionType.value:
-            continue;
-          case ActionType.add:
-            result += actions[i+1].value ?? 0;
-            break;
-          case ActionType.substract:
-            result -= actions[i+1].value ?? 0;
-            break;
-          case ActionType.multiply:
-            result *= actions[i+1].value ?? 0;
-            break;
-          case ActionType.divide:
-            result /= actions[i+1].value ?? 0;
-            break;
-          case ActionType.modulo:
-            result %= actions[i+1].value ?? 0;
-            break;
+      try {
+        Parser p = Parser();
+        var equation = secondEquation.replaceAll('x', '*');
+        if (isSymbol(getLast(equation))) {
+          equation = removeLast(equation);
         }
+        Expression exp = p.parse(equation);
+        ContextModel cm = ContextModel();
+        mainEquation = '${exp.evaluate(EvaluationType.REAL, cm)}';
+        if (mainEquation.endsWith('.0')) {
+          mainEquation = mainEquation.substring(0, mainEquation.length - 2);
+        }
+      } catch (e) {
+        mainEquation = '';
+        debugPrint(e.toString());
       }
-
-      mainEquation = '$result';
     });
   }
 
-  void add(Button button) {
-    addAction(ActionType.value, value: double.tryParse(mainEquation) ?? 0);
-    addAction(ActionType.add);
-  }
-
-  void substract(Button button) {
-    addAction(ActionType.value, value: double.tryParse(mainEquation) ?? 0);
-    addAction(ActionType.substract);
-  }
-
-  void multiply(Button button) {
-    addAction(ActionType.value, value: double.tryParse(mainEquation) ?? 0);
-    addAction(ActionType.multiply);
-  }
-
-  void divide(Button button) {
-    addAction(ActionType.value, value: double.tryParse(mainEquation) ?? 0);
-    addAction(ActionType.divide);
-  }
-
-  void modulo(Button button) {
-    addAction(ActionType.value, value: double.tryParse(mainEquation) ?? 0);
-    addAction(ActionType.modulo);
-  }
-
   List<Widget> _buildButtons() {
+    var primaryColor = Theme.of(context).primaryColor;
+
     List<Button> buttons = <Button>[
-      Button('AC', onPressed: clear),
-      Button('+/-', onPressed: changeSymbol),
-      Button('%', onPressed: modulo),
-      Button('/', onPressed: divide),
+      Button('AC',
+          onPressed: clear, foregroundColor: Colors.grey, fontSize: 28),
+      Button('DEL',
+          onPressed: delete, foregroundColor: Colors.grey, fontSize: 28),
+      Button('%', onPressed: appendOrReplace, foregroundColor: Colors.grey),
+      Button('/', onPressed: appendOrReplace, foregroundColor: Colors.pink),
       Button('7'),
       Button('8'),
       Button('9'),
-      Button('x', onPressed: multiply),
+      Button('x', onPressed: appendOrReplace, foregroundColor: Colors.pink),
       Button('4'),
       Button('5'),
       Button('6'),
-      Button('-', onPressed: substract),
+      Button('-', onPressed: appendOrReplace, foregroundColor: Colors.pink),
       Button('1'),
       Button('2'),
       Button('3'),
-      Button('+', onPressed: add),
+      Button('+', onPressed: appendOrReplace, foregroundColor: Colors.pink),
       Button('0',
           flex: 2,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(80))),
       Button('.'),
-      Button('=', onPressed: calc),
+      Button('=',
+          onPressed: calc,
+          backgroundColor: primaryColor,
+          foregroundColor: Colors.white),
     ];
 
     return buttons.map((button) => button.withOnPressedIfNull(append)).toList();
@@ -151,12 +171,17 @@ class _CalculatorState extends State<Calculator> {
         buttons.sublist(start, end).toList();
 
     return Scaffold(
-        body: Center(
+        body: SafeArea(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Equation(text: secondEquation),
+          Column(
+            children: <Widget>[
+          Equation(text: secondEquation, color: Colors.pink),
           Equation(text: mainEquation, fontSize: 72),
+            ],
+          ),
           Column(
             children: <Widget>[
               Row(children: sublistButtons(0, 4)),

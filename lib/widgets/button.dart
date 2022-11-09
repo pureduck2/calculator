@@ -5,11 +5,17 @@ class Button extends StatelessWidget {
       {super.key,
       this.flex = 1,
       this.shape = const CircleBorder(),
-      this.onPressed});
+      this.onPressed,
+      this.foregroundColor,
+      this.backgroundColor = Colors.black12,
+      this.fontSize = 32});
 
   final String text;
   final int flex;
   final OutlinedBorder shape;
+  final Color? foregroundColor;
+  final Color? backgroundColor;
+  final double? fontSize;
   void Function(Button)? onPressed;
 
   Button withOnPressedIfNull(void Function(Button)? onPressed) {
@@ -21,18 +27,18 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: flex,
-      child: ElevatedButton(
+      child: TextButton(
         onPressed: () {
           onPressed?.call(this);
         },
-        style: ElevatedButton.styleFrom(
-          shape: shape,
-          backgroundColor: Colors.red,
-          minimumSize: const Size.fromHeight(84),
-        ),
+        style: TextButton.styleFrom(
+            shape: shape,
+            minimumSize: const Size.fromHeight(84),
+            foregroundColor: foregroundColor,
+            backgroundColor: backgroundColor),
         child: Text(
           text,
-          style: const TextStyle(fontSize: 32),
+          style: TextStyle(fontSize: fontSize),
         ),
       ),
     );
