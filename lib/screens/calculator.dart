@@ -89,7 +89,10 @@ class _CalculatorState extends State<Calculator> {
           !lastNumber.contains('.') &&
           lastNumber.length == 1) {
         // do nothing
-      } else if (lastCharacter == '0' && !lastNumber.contains('.') && lastNumber.length == 1) {
+      } else if (lastCharacter == '0' &&
+          !lastNumber.contains('.') &&
+          lastNumber.length == 1 &&
+          button.text != '.') {
         secondEquation = '${removeLast(secondEquation)}${button.text}';
       } else {
         secondEquation += button.text;
