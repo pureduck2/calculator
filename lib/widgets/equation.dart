@@ -5,11 +5,11 @@ class Equation extends StatelessWidget {
       {super.key,
       required this.text,
       this.fontSize = 28,
-      this.color = Colors.black});
+      this.color});
 
   final String? text;
   final double fontSize;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {

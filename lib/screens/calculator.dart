@@ -2,6 +2,7 @@ import 'package:calculator/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:calculator/widgets/equation.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Calculator extends StatefulWidget {
   const Calculator({super.key});
@@ -38,6 +39,7 @@ class _CalculatorState extends State<Calculator> {
       case '+':
       case '-':
       case 'x':
+      case '*':
       case '/':
       case '%':
         return true;
@@ -46,14 +48,14 @@ class _CalculatorState extends State<Calculator> {
     }
   }
 
-  void delete(Button button) {
+  void delete(BuildContext context, Button button) {
     setState(() {
       secondEquation = removeLast(secondEquation);
       mainEquation = '';
     });
   }
 
-  void appendOrReplace(Button button) {
+  void appendOrReplace(BuildContext context, Button button) {
     setState(() {
       String last = getLast(secondEquation);
 
@@ -74,7 +76,7 @@ class _CalculatorState extends State<Calculator> {
     });
   }
 
-  void append(Button button) {
+  void append(BuildContext context, Button button) {
     setState(() {
       var lastCharacter = getLast(secondEquation);
       var lastNumber = secondEquation.split(RegExp(r'[+\-x/]')).last;
@@ -102,20 +104,24 @@ class _CalculatorState extends State<Calculator> {
     });
   }
 
-  void clear(Button button) {
+  void clear(BuildContext context, Button button) {
     setState(() {
       mainEquation = '';
       secondEquation = '';
     });
   }
 
-  void calc(Button button) {
+  void calc(BuildContext context, Button button) {
     setState(() {
       try {
         Parser p = Parser();
         var equation = secondEquation.replaceAll('x', '*');
         if (isSymbol(getLast(equation))) {
-          equation = removeLast(equation);
+          // equation = removeLast(equation);
+          Fluttertoast.showToast(
+            msg: 'Użyto nieprawidłowego formatu',
+            backgroundColor: Colors.transparent
+          );
         }
         Expression exp = p.parse(equation);
         ContextModel cm = ContextModel();
@@ -131,7 +137,10 @@ class _CalculatorState extends State<Calculator> {
   }
 
   List<Widget> _buildButtons() {
-    var primaryColor = Theme.of(context).primaryColor;
+    var theme = Theme.of(context);
+    var primaryColor = theme.colorScheme.primary;
+    var secondaryColor = theme.colorScheme.secondary;
+    var background = theme.colorScheme.background;
 
     List<Button> buttons = <Button>[
       Button('AC',
@@ -139,19 +148,19 @@ class _CalculatorState extends State<Calculator> {
       Button('DEL',
           onPressed: delete, foregroundColor: Colors.grey, fontSize: 24),
       Button('%', onPressed: appendOrReplace, foregroundColor: Colors.grey),
-      Button('/', onPressed: appendOrReplace, foregroundColor: Colors.pink),
+      Button('/', onPressed: appendOrReplace, foregroundColor: secondaryColor),
       Button('7'),
       Button('8'),
       Button('9'),
-      Button('x', onPressed: appendOrReplace, foregroundColor: Colors.pink),
+      Button('x', onPressed: appendOrReplace, foregroundColor: secondaryColor),
       Button('4'),
       Button('5'),
       Button('6'),
-      Button('-', onPressed: appendOrReplace, foregroundColor: Colors.pink),
+      Button('-', onPressed: appendOrReplace, foregroundColor: secondaryColor),
       Button('1'),
       Button('2'),
       Button('3'),
-      Button('+', onPressed: appendOrReplace, foregroundColor: Colors.pink),
+      Button('+', onPressed: appendOrReplace, foregroundColor: secondaryColor),
       Button('0',
           flex: 2,
           shape:
@@ -160,7 +169,7 @@ class _CalculatorState extends State<Calculator> {
       Button('=',
           onPressed: calc,
           backgroundColor: primaryColor,
-          foregroundColor: Colors.white),
+          foregroundColor: background),
     ];
 
     return buttons.map((button) => button.withOnPressedIfNull(append)).toList();
@@ -181,7 +190,7 @@ class _CalculatorState extends State<Calculator> {
           children: <Widget>[
             Column(
               children: <Widget>[
-                Equation(text: secondEquation, color: Colors.pink),
+                Equation(text: secondEquation, color: Theme.of(context).colorScheme.secondary),
                 Equation(text: mainEquation, fontSize: 72),
               ],
             ),
@@ -191,10 +200,7 @@ class _CalculatorState extends State<Calculator> {
                 Row(children: sublistButtons(4, 8)),
                 Row(children: sublistButtons(8, 12)),
                 Row(children: sublistButtons(12, 16)),
-                Row(children: <Widget>[
-                  // It doesn't look right, but whatever
-                  ...sublistButtons(16, 19)
-                ]),
+                Row(children: sublistButtons(16, 19)),
               ],
             )
           ],

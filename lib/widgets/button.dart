@@ -16,9 +16,9 @@ class Button extends StatelessWidget {
   final Color? foregroundColor;
   final Color? backgroundColor;
   final double? fontSize;
-  void Function(Button)? onPressed;
+  void Function(BuildContext, Button)? onPressed;
 
-  Button withOnPressedIfNull(void Function(Button)? onPressed) {
+  Button withOnPressedIfNull(void Function(BuildContext, Button)? onPressed) {
     this.onPressed = this.onPressed ?? onPressed;
     return this;
   }
@@ -31,12 +31,12 @@ class Button extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: OutlinedButton(
           onPressed: () {
-            onPressed?.call(this);
+            onPressed?.call(context, this);
           },
           style: OutlinedButton.styleFrom(
             minimumSize: const Size.fromHeight(84),
             foregroundColor: foregroundColor,
-            backgroundColor: backgroundColor,
+            backgroundColor: backgroundColor ?? Theme.of(context).colorScheme.background,
           ),
           child: Text(
             text,
