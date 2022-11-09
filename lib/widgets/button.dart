@@ -7,8 +7,8 @@ class Button extends StatelessWidget {
       this.shape = const CircleBorder(),
       this.onPressed,
       this.foregroundColor,
-      this.backgroundColor = Colors.black12,
-      this.fontSize = 32});
+      this.backgroundColor,
+      this.fontSize = 28});
 
   final String text;
   final int flex;
@@ -27,18 +27,21 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: flex,
-      child: TextButton(
-        onPressed: () {
-          onPressed?.call(this);
-        },
-        style: TextButton.styleFrom(
-            shape: shape,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: OutlinedButton(
+          onPressed: () {
+            onPressed?.call(this);
+          },
+          style: OutlinedButton.styleFrom(
             minimumSize: const Size.fromHeight(84),
             foregroundColor: foregroundColor,
-            backgroundColor: backgroundColor),
-        child: Text(
-          text,
-          style: TextStyle(fontSize: fontSize),
+            backgroundColor: backgroundColor,
+          ),
+          child: Text(
+            text,
+            style: TextStyle(fontSize: fontSize),
+          ),
         ),
       ),
     );

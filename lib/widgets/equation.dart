@@ -4,7 +4,7 @@ class Equation extends StatelessWidget {
   const Equation(
       {super.key,
       required this.text,
-      this.fontSize = 24,
+      this.fontSize = 28,
       this.color = Colors.black});
 
   final String? text;

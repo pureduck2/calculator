@@ -132,9 +132,9 @@ class _CalculatorState extends State<Calculator> {
 
     List<Button> buttons = <Button>[
       Button('AC',
-          onPressed: clear, foregroundColor: Colors.grey, fontSize: 28),
+          onPressed: clear, foregroundColor: Colors.grey, fontSize: 24),
       Button('DEL',
-          onPressed: delete, foregroundColor: Colors.grey, fontSize: 28),
+          onPressed: delete, foregroundColor: Colors.grey, fontSize: 24),
       Button('%', onPressed: appendOrReplace, foregroundColor: Colors.grey),
       Button('/', onPressed: appendOrReplace, foregroundColor: Colors.pink),
       Button('7'),
@@ -178,8 +178,8 @@ class _CalculatorState extends State<Calculator> {
         children: <Widget>[
           Column(
             children: <Widget>[
-          Equation(text: secondEquation, color: Colors.pink),
-          Equation(text: mainEquation, fontSize: 72),
+              Equation(text: secondEquation, color: Colors.pink),
+              Equation(text: mainEquation, fontSize: 72),
             ],
           ),
           Column(
@@ -193,7 +193,6 @@ class _CalculatorState extends State<Calculator> {
               Row(children: sublistButtons(12, 16)),
               const SizedBox(height: 10),
               Row(children: <Widget>[
-                const SizedBox(width: 7),
                 // It doesn't look right, but whatever
                 ...sublistButtons(16, 19)
               ]),
