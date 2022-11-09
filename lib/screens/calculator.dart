@@ -188,13 +188,9 @@ class _CalculatorState extends State<Calculator> {
           Column(
             children: <Widget>[
               Row(children: sublistButtons(0, 4)),
-              const SizedBox(height: 10),
               Row(children: sublistButtons(4, 8)),
-              const SizedBox(height: 10),
               Row(children: sublistButtons(8, 12)),
-              const SizedBox(height: 10),
               Row(children: sublistButtons(12, 16)),
-              const SizedBox(height: 10),
               Row(children: <Widget>[
                 // It doesn't look right, but whatever
                 ...sublistButtons(16, 19)
