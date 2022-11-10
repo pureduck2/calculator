@@ -1,3 +1,4 @@
+import 'package:calculator/screens/history.dart';
 import 'package:flutter/material.dart';
 import 'screens/calculator.dart';
 
@@ -16,7 +17,11 @@ class MyApp extends StatelessWidget {
               .copyWith(secondary: Colors.pink)),
       darkTheme: ThemeData.dark().copyWith(colorScheme: const ColorScheme.dark()),
       themeMode: ThemeMode.dark,
-      home: const Calculator(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const Calculator(),
+        '/history': (context) => const History(),
+      },
     );
   }
 }

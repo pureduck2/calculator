@@ -1,3 +1,4 @@
+import 'package:calculator/historyitem.dart';
 import 'package:calculator/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:calculator/widgets/equation.dart';
@@ -14,6 +15,7 @@ class Calculator extends StatefulWidget {
 class _CalculatorState extends State<Calculator> {
   String mainEquation = '';
   String secondEquation = '';
+  List<HistoryItem> history = [];
 
   String removeLast(String string) {
     if (string.isNotEmpty) {
@@ -117,7 +119,6 @@ class _CalculatorState extends State<Calculator> {
         Parser p = Parser();
         var equation = secondEquation.replaceAll('x', '*');
         if (isSymbol(getLast(equation))) {
-          // equation = removeLast(equation);
           Fluttertoast.showToast(
             msg: 'Użyto nieprawidłowego formatu',
             backgroundColor: Colors.transparent
@@ -129,6 +130,7 @@ class _CalculatorState extends State<Calculator> {
         if (mainEquation.endsWith('.0')) {
           mainEquation = mainEquation.substring(0, mainEquation.length - 2);
         }
+        history.add(HistoryItem(equation, mainEquation));
       } catch (e) {
         mainEquation = '';
         debugPrint(e.toString());
@@ -183,6 +185,16 @@ class _CalculatorState extends State<Calculator> {
         buttons.sublist(start, end).toList();
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Calculator'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/history', arguments: history);
+              },
+              icon: const Icon(Icons.history))
+        ],
+      ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
