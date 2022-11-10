@@ -1,5 +1,7 @@
 import 'package:calculator/historyitem.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class History extends StatefulWidget {
   const History({super.key});
@@ -36,7 +38,7 @@ class _HistoryState extends State<History> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('History'),
+          title: Text(AppLocalizations.of(context)!.history),
           actions: [
             IconButton(
                 onPressed: () => setState(() => args.clear()),

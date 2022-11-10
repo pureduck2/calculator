@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:calculator/widgets/equation.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Calculator extends StatefulWidget {
   const Calculator({super.key});
@@ -120,7 +122,7 @@ class _CalculatorState extends State<Calculator> {
         var equation = secondEquation.replaceAll('x', '*');
         if (isSymbol(getLast(equation))) {
           Fluttertoast.showToast(
-            msg: 'Użyto nieprawidłowego formatu',
+            msg: AppLocalizations.of(context)!.incorrectFormatUsed,
             backgroundColor: Colors.transparent
           );
         }
@@ -186,7 +188,7 @@ class _CalculatorState extends State<Calculator> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calculator'),
+        title: Text(AppLocalizations.of(context)!.name),
         actions: [
           IconButton(
               onPressed: () {
