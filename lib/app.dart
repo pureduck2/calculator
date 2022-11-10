@@ -4,8 +4,31 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/calculator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  _MyAppState createState() => _MyAppState();
+
+  static _MyAppState? of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale? locale;
+
+  void setLocale(Locale value) {
+    setState(() {
+      locale = value;
+    });
+  }
+
+  void toggleLocale() {
+    if (locale?.languageCode == 'pl') {
+      setLocale(const Locale('en', ''));
+    } else if (locale?.languageCode == 'en') {
+      setLocale(const Locale('pl', ''));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +44,7 @@ class MyApp extends StatelessWidget {
         Locale('en', ''),
         Locale('pl', '')
       ],
+      locale: locale,
       title: 'Calculator',
       theme: ThemeData.light().copyWith(
           colorScheme: const ColorScheme.light()

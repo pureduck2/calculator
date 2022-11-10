@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:calculator/app.dart';
 import 'package:calculator/historyitem.dart';
 import 'package:calculator/widgets/button.dart';
 import 'package:flutter/material.dart';
@@ -129,9 +130,8 @@ class _CalculatorState extends State<Calculator> {
         var equation = secondEquation.replaceAll('x', '*');
         if (isSymbol(getLast(equation))) {
           Fluttertoast.showToast(
-            msg: AppLocalizations.of(context)!.incorrectFormatUsed,
-            backgroundColor: Colors.transparent
-          );
+              msg: AppLocalizations.of(context)!.incorrectFormatUsed,
+              backgroundColor: Colors.transparent);
         }
         Expression exp = p.parse(equation);
         ContextModel cm = ContextModel();
@@ -194,24 +194,33 @@ class _CalculatorState extends State<Calculator> {
         buttons.sublist(start, end).toList();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.name),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/history');
-              },
-              icon: const Icon(Icons.history))
-        ],
-      ),
-      body: SafeArea(
-        child: Column(
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.name),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  MyApp.of(context)!.toggleLocale();
+                },
+                icon: const Icon(Icons.language)
+            ),
+            IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/history');
+                },
+                icon: const Icon(Icons.history)
+            ),
+          ],
+        ),
+        body: SafeArea(
+            child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Column(
               children: <Widget>[
-                Equation(text: secondEquation, color: Theme.of(context).colorScheme.secondary),
+                Equation(
+                    text: secondEquation,
+                    color: Theme.of(context).colorScheme.secondary),
                 Equation(text: mainEquation, fontSize: 72),
               ],
             ),
@@ -225,8 +234,6 @@ class _CalculatorState extends State<Calculator> {
               ],
             )
           ],
-        )
-      )
-    );
+        )));
   }
 }
