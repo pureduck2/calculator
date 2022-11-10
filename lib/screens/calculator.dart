@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:calculator/historyitem.dart';
 import 'package:calculator/widgets/button.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,6 @@ class Calculator extends StatefulWidget {
 class _CalculatorState extends State<Calculator> {
   String mainEquation = '';
   String secondEquation = '';
-  List<HistoryItem> history = [];
 
   String removeLast(String string) {
     if (string.isNotEmpty) {
@@ -115,6 +116,12 @@ class _CalculatorState extends State<Calculator> {
     });
   }
 
+  Future<void> addToHistory(HistoryItem item) async {
+    final history = await SharedPreferences.getInstance();
+    final List<String> items = history.getStringList('history') ?? [];
+    await history.setStringList('history', [...items, jsonEncode(item)]);
+  }
+
   void calc(BuildContext context, Button button) {
     setState(() {
       try {
@@ -132,7 +139,7 @@ class _CalculatorState extends State<Calculator> {
         if (mainEquation.endsWith('.0')) {
           mainEquation = mainEquation.substring(0, mainEquation.length - 2);
         }
-        history.add(HistoryItem(equation, mainEquation));
+        addToHistory(HistoryItem(equation, mainEquation));
       } catch (e) {
         mainEquation = '';
         debugPrint(e.toString());
@@ -192,7 +199,7 @@ class _CalculatorState extends State<Calculator> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/history', arguments: history);
+                Navigator.pushNamed(context, '/history');
               },
               icon: const Icon(Icons.history))
         ],
