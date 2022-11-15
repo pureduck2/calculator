@@ -44,6 +44,9 @@ class _MyAppState extends State<MyApp> {
         Locale('en', ''),
         Locale('pl', '')
       ],
+      localeResolutionCallback: (deviceLocale, supportedLocales) {
+        locale = deviceLocale;
+      },
       locale: locale,
       title: 'Calculator',
       theme: ThemeData.light().copyWith(
