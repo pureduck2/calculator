@@ -135,8 +135,9 @@ class _CalculatorState extends State<Calculator> {
         Expression exp = p.parse(equation);
         ContextModel cm = ContextModel();
         mainEquation = '${exp.evaluate(EvaluationType.REAL, cm)}';
-        if (mainEquation.endsWith('.0')) {
-          mainEquation = mainEquation.substring(0, mainEquation.length - 2);
+        mainEquation = double.parse(mainEquation).toStringAsFixed(2);
+        if (mainEquation.endsWith('.00')) {
+          mainEquation = mainEquation.substring(0, mainEquation.length - 3);
         }
         addToHistory(HistoryItem(equation, mainEquation));
       } catch (e) {
