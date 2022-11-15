@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
               .copyWith(background: Colors.white)
               .copyWith(secondary: Colors.pink)),
       darkTheme: ThemeData.dark().copyWith(colorScheme: const ColorScheme.dark()),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.system,
       initialRoute: '/',
       routes: {
         '/': (context) => const Calculator(),

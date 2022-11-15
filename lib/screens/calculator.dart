@@ -130,8 +130,7 @@ class _CalculatorState extends State<Calculator> {
         var equation = secondEquation.replaceAll('x', '*');
         if (isSymbol(getLast(equation))) {
           Fluttertoast.showToast(
-              msg: AppLocalizations.of(context)!.incorrectFormatUsed,
-              backgroundColor: Colors.transparent);
+              msg: AppLocalizations.of(context)!.incorrectFormatUsed);
         }
         Expression exp = p.parse(equation);
         ContextModel cm = ContextModel();
@@ -201,14 +200,12 @@ class _CalculatorState extends State<Calculator> {
                 onPressed: () {
                   MyApp.of(context)!.toggleLocale();
                 },
-                icon: const Icon(Icons.language)
-            ),
+                icon: const Icon(Icons.language)),
             IconButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/history');
                 },
-                icon: const Icon(Icons.history)
-            ),
+                icon: const Icon(Icons.history)),
           ],
         ),
         body: SafeArea(

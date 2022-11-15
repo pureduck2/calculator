@@ -25,16 +25,18 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context).size;
+
     return Expanded(
       flex: flex,
-      child: Padding(
+      child: Container(
         padding: const EdgeInsets.all(5.0),
+        height: mediaQuery.height * 0.125,
         child: OutlinedButton(
           onPressed: () {
             onPressed?.call(context, this);
           },
           style: OutlinedButton.styleFrom(
-            minimumSize: const Size.fromHeight(84),
             foregroundColor: foregroundColor,
             backgroundColor: backgroundColor ?? Theme.of(context).colorScheme.background,
           ),
